@@ -1,2 +1,2 @@
-Highscore:3
+Highscore:0
 Flawless:1
