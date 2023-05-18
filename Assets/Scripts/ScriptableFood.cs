@@ -7,4 +7,5 @@ public class ScriptableFood : ScriptableObject
 {
     public int points;
     public string foodName;
+    public bool isPowerUp;
 }

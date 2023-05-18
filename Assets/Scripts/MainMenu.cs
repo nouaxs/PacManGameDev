@@ -42,7 +42,8 @@ public class MainMenu : MonoBehaviour
 
     public void PlayButtonClicked()
     {
-        SceneManager.LoadScene(1);
+        //SceneManager.LoadScene(1);
+        GameManager.singleton.LoadScene(1);
     }
 
     public void ProfileChanged(int id)

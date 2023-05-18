@@ -11,8 +11,6 @@ public class LevelComplete : MonoBehaviour
     void Start()
     {
         foodAmount = GameObject.FindGameObjectsWithTag("Food").Length;
-        
-        
     }
 
 

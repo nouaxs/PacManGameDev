@@ -1,4 +1,4 @@
-using System;
+ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,17 +19,19 @@ public class Achievement : MonoBehaviour
         {
             Destroy(gameObject);
             return;
-        }
+        } 
     }
 
     public void SetAchievement(string achievementName, int status, bool save)
     {
+        
         for (int i = 0; i < data.Length; i++)
         {
+            
             if (data[i].name == achievementName && data[i].status != status)
             {
                 if (save) {
-                    Debug.Log("You have just unlocked " + achievementName + "!");
+                    GameObject.FindGameObjectWithTag("UIManager").GetComponent<UIManager>().ShowAchievement(achievementName,5f);
                 }
                 
                 data[i].status = status;

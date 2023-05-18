@@ -7,6 +7,8 @@ TagManager:
   - Food
   - Enemy
   - LevelComplete
+  - UIManager
+  - SceneTransitioner
   layers:
   - Default
   - TransparentFX
@@ -14,7 +16,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Not Pathable
   - 
   - 
   - 

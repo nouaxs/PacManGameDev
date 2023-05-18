@@ -1,2 +1,3 @@
-Highscore:0
+Highscore:106
 Flawless:1
+Fruitless:1
