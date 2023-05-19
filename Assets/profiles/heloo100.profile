@@ -1,0 +1,1 @@
+{"name":"heloo100","highScore":0,"flawlessStatus":0,"fruitlessStatus":1}

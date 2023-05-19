@@ -13,7 +13,11 @@ public class LevelComplete : MonoBehaviour
         foodAmount = GameObject.FindGameObjectsWithTag("Food").Length;
     }
 
-
+    /**
+     * Function keeping track of the number of food elements on the board
+     * if the food finishes, the next scene is loaded
+     * if the player ate all the food without dying at all, they get the Flawless achievement
+     */
     public void DecrementFood()
     {
         foodAmount -= 1;

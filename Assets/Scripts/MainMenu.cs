@@ -17,51 +17,35 @@ public class MainMenu : MonoBehaviour
         RebuildDropdown();
     }
 
+
     void RebuildDropdown()
     {
+        string profilesPath = Path.Combine(Application.dataPath, "profiles");
 
-        profileDropdown.options.Clear();
-        string[] profiles = Directory.GetFiles(Application.dataPath + "/profiles/", "*.profile");
-        List<string> profilesList = new List<string>();
-
-        foreach (string filePath in profiles)
+        if (Directory.Exists(profilesPath))
         {
-            string profileName = Path.GetFileNameWithoutExtension(filePath);
-            profilesList.Add(profileName);
-        }
+            profileDropdown.options.Clear();
+            string[] profiles = Directory.GetFiles(profilesPath, "*.profile");
+            List<string> profilesList = new List<string>();
 
-        profileDropdown.AddOptions(profilesList);
+            foreach (string filePath in profiles)
+            {
+                string profileName = Path.GetFileNameWithoutExtension(filePath);
+                profilesList.Add(profileName);
+            }
+
+            profileDropdown.AddOptions(profilesList);
+        }
 
         if (profileDropdown.options.Count > 0)
         {
             ProfileChanged(0);
         }
-
-
-        //profileDropdown.options.Clear();
-        //string[] profiles = Directory.GetFiles(Application.dataPath + "/profiles/", "*.profile");
-        //List<string> profilesList = new List<string>();
-        //foreach (string s in profiles)
-        //{
-
-        //    string pname = s.Substring(s.LastIndexOf("/") + 1);
-        //    if (pname.Equals(".profile"))
-        //    {
-        //        continue;
-        //    }
-        //    profilesList.Add(pname.Substring(0, pname.LastIndexOf(".")));
-        //}
-        //profileDropdown.AddOptions(profilesList);
-        //if (profileDropdown.options.Count > 0)
-        //{
-        //    ProfileChanged(0);
-        //}
     }
 
 
     public void PlayButtonClicked()
     {
-        //SceneManager.LoadScene(1);
         GameManager.singleton.LoadScene(1);
     }
 
@@ -73,7 +57,8 @@ public class MainMenu : MonoBehaviour
 
     public void CreateProfileButton()
     {
-        string filePath = Application.dataPath + "/profiles/" + nameField.text + ".profile";
+        //string filePath = Application.dataPath + "/profiles/" + nameField.text + ".profile";
+        string filePath = Path.Combine(Application.persistentDataPath, "profiles", nameField.text + ".profile");
         if (!File.Exists(filePath))
         {
             File.WriteAllText(Application.dataPath + "/profiles/" + nameField.text + ".profile", "");
@@ -83,6 +68,9 @@ public class MainMenu : MonoBehaviour
 
     }
 
+    /**
+     * Function reading the data from a json file and outputting it to the panel
+     */
     public void ShowProfileButton()
     {
         int selectedIndex = profileDropdown.value;

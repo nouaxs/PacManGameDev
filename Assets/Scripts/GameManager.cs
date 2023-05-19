@@ -47,6 +47,12 @@ public class GameManager : MonoBehaviour
         return lives;
     }
 
+
+    /**
+     * Function responsible of decrementing lives
+     * If no more lives, loads the next scene
+     * If the player loses all his lives without collecting any fruits, Fruitless achievement obtained
+     */
     public void RemoveLives(int amount)
     {
         lives -= amount;
@@ -61,6 +67,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /**
+     * Resets all enemies positions
+     */
     public void RestartEnemies()
     {
         foreach (GameObject e in GameObject.FindGameObjectsWithTag("Enemy"))
@@ -72,6 +81,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
 
     public void setHighScore(int newHighscore)
     {
@@ -88,55 +98,9 @@ public class GameManager : MonoBehaviour
         return curProfile;
     }
 
-
-    ////Original
-    //public void LoadProfile(string profile)
-    //{
-    //    curProfile = profile;
-    //    string[] data = File.ReadAllLines(Application.dataPath + "/profiles/" + curProfile + ".profile");
-    //    foreach (string s in data)
-    //    {
-    //        if (s.StartsWith("HighScore:"))
-    //        {
-    //            if (int.TryParse(s.Substring(s.IndexOf(":") + 1), out int hs)) // loading highscore if it exists
-    //            {
-    //                highScore = hs;
-    //            }
-    //        }
-    //        else if (s.StartsWith("Flawless:"))
-    //        {
-    //            if (int.TryParse(s.Substring(s.IndexOf(":") + 1), out int status)) // loading highscore if it exists
-    //            {
-    //                Achievement.singleton.SetAchievement("Flawless", status, false);
-    //            }
-    //        }
-    //        else if (s.StartsWith("Fruitless:"))
-    //        {
-    //            if (int.TryParse(s.Substring(s.IndexOf(":") + 1), out int status)) // loading highscore if it exists
-    //            {
-    //                Achievement.singleton.SetAchievement("Fruitless", status, false);
-    //            }
-    //        }
-    //    }
-    //}
-
-    ////Original
-    //public void SaveCurrentProfile()
-    //{
-    //    string data = "";
-    //    if (highScore < score)
-    //    {
-    //        highScore = score;
-    //    }
-    //    data += "Highscore:" + highScore + "\n";
-    //    for (int i = 0; i < Achievement.singleton.data.Length; i++)
-    //    {
-    //        data += Achievement.singleton.data[i].name + ":" + Achievement.singleton.data[i].status + "\n";
-    //    }
-    //    File.WriteAllText(Application.dataPath + "/profiles/" + curProfile + ".profile", data);
-    //}
-
-
+    /**
+     * Function responsible of saving the currently selected profile's data into a file using JSON
+     */
     public void SaveCurrentProfile()
     {
         ProfileData profileData = new ProfileData();
@@ -152,8 +116,9 @@ public class GameManager : MonoBehaviour
         File.WriteAllText(Application.dataPath + "/profiles/" + curProfile + ".profile", jsonData);
     }
 
-
-
+    /**
+     * Function responsible of deserializing a JSON file containing a profile
+     */
     public void LoadProfile(string profile)
     {
         curProfile = profile;
@@ -175,9 +140,9 @@ public class GameManager : MonoBehaviour
             {
                 // Handle the case where the file is empty by initializing with default values
                 ProfileData defaultProfileData = new ProfileData();
-                defaultProfileData.name = profile; 
-                defaultProfileData.highScore = 0; 
-                defaultProfileData.flawlessStatus = 0; 
+                defaultProfileData.name = profile;
+                defaultProfileData.highScore = 0;
+                defaultProfileData.flawlessStatus = 0;
                 defaultProfileData.fruitlessStatus = 0;
 
                 string defaultJsonData = JsonUtility.ToJson(defaultProfileData);
@@ -192,62 +157,6 @@ public class GameManager : MonoBehaviour
     }
 
 
-
-
-
-    //public void SaveCurrentProfile()
-    //{
-    //    string filePath = Application.dataPath + "/profiles/" + curProfile + ".profile";
-
-    //    ProfileData profileData = new ProfileData();
-    //    if (highScore < score)
-    //    {
-    //        profileData.highScore = score;
-    //    }
-
-    //    profileData.flawlessStatus = Achievement.singleton.GetAchievementStatus("Flawless");
-    //    profileData.fruitlessStatus = Achievement.singleton.GetAchievementStatus("Fruitless");
-
-    //    string jsonData = JsonUtility.ToJson(profileData);
-    //    File.WriteAllText(filePath, jsonData);
-    //}
-
-    //public void SaveCurrentProfile()
-    //{
-    //    string filePath = Application.dataPath + "/profiles/" + curProfile + ".profile";
-
-    //    ProfileData profileData = new ProfileData();
-
-    //    // Read the existing data
-    //    if (File.Exists(filePath))
-    //    {
-    //        string existingData = File.ReadAllText(filePath);
-    //        ProfileData prevData = JsonUtility.FromJson<ProfileData>(existingData);
-
-    //        // Check if the current score is higher than the existing high score
-    //        if (score > prevData.highScore)
-    //        {
-    //            profileData.highScore = score;
-    //        }
-    //        else
-    //        {
-    //            // Keep the existing high score
-    //            profileData.highScore = prevData.highScore;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        // No existing data, use the current score as the high score
-    //        profileData.highScore = score;
-    //    }
-
-    //    profileData.flawlessStatus = Achievement.singleton.GetAchievementStatus("Flawless");
-    //    profileData.fruitlessStatus = Achievement.singleton.GetAchievementStatus("Fruitless");
-
-    //    string jsonData = JsonUtility.ToJson(profileData);
-    //    File.WriteAllText(filePath, jsonData);
-    //}
-
     public void LoadScene(int sceneIndex)
     {
         StartCoroutine(DoSceneTransition(sceneIndex));
@@ -261,7 +170,9 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
     }
 
-
+    /**
+     * Sets the enemies state using the state pattern
+     */
     public void SetEnemiesState(IEnemyState state)
     {
         foreach (Enemy e in GameObject.FindObjectsOfType<Enemy>())

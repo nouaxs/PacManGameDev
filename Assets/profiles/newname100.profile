@@ -1,0 +1,1 @@
+{"name":"newname100","highScore":42,"flawlessStatus":0,"fruitlessStatus":0}

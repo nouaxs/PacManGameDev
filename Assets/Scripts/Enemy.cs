@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 
+/**
+ * This class is used for the enemies. 
+ * The used A* pathfinding algorithm is from the A* Pathfinding Project package by Aron Granberg (https://arongranberg.com/astar/)
+ */
 public class Enemy : MonoBehaviour
 {
     private Vector2 startPosition;
@@ -13,12 +17,16 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Animator animator;
 
-    private IEnemyState state = new EnemyChaseState(); // State of the nemey set
-    private Vector2 target;
-    private float nextWaypointDistance = 0.1f;
-    private Path curPath;
-    private int curWaypoint;
+    private IEnemyState state; // State of the enemy
+    private Vector2 target; // target destination
+    private float nextWaypointDistance = 0.1f; // The next calculated "transit" in the path
+    private Path curPath; // The path the enemy is currently following
+    private int curWaypoint; // The current waypoint the enemy is heading towards
 
+    private void Awake()
+    {
+        state = new EnemyChaseState();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -51,10 +59,13 @@ public class Enemy : MonoBehaviour
         if (!p.error)
         {
             curPath = p;
-            curWaypoint = 0; 
+            curWaypoint = 0;
         }
     }
 
+    /**
+     * function responsible of updating the enemy's movement using the path
+     */
     void UpdatePathfinding()
     {
         // Do not do anything if we do not have a path
@@ -81,6 +92,8 @@ public class Enemy : MonoBehaviour
     void FixedUpdate()
     {
         animator.SetFloat("Velocity", rb.velocity.magnitude);
+
+        // Changing the direction of the enemy to face the way they are walking towards
         if (rb.velocity.x >= 0)
         {
             transform.localScale = new Vector3(1, 1, 1);
