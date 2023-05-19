@@ -55,7 +55,7 @@ public class Achievement : MonoBehaviour
             }
         }
 
-        return 0; // Default status if achievement name is not found
+        return 0;
     }
 }
 

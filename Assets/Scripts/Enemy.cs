@@ -18,7 +18,6 @@ public class Enemy : MonoBehaviour
     private float nextWaypointDistance = 0.1f;
     private Path curPath;
     private int curWaypoint;
-    private bool reachedEndOfPath;
 
 
     // Start is called before the first frame update
@@ -61,31 +60,22 @@ public class Enemy : MonoBehaviour
         // Do not do anything if we do not have a path
         if (curPath != null)
         {
-
             // Check if we are at the end of the path or not
-            if (curWaypoint >= curPath.vectorPath.Count)
+            if (!(curWaypoint >= curPath.vectorPath.Count))
             {
-                reachedEndOfPath = true;
-                return;
-            }
-            else
-            {
-                reachedEndOfPath = false;
-            }
+                // Move to our path
+                Vector2 dir = ((Vector2)curPath.vectorPath[curWaypoint] - rb.position).normalized;
+                rb.AddForce(dir * speed * Time.fixedDeltaTime);
 
-            // Move to our path
-            Vector2 dir = ((Vector2)curPath.vectorPath[curWaypoint] - rb.position).normalized;
-            rb.AddForce(dir * speed * Time.fixedDeltaTime);
-
-            // Iterate to next waypoint once we are close to the current one
-            float distance = Vector2.Distance(rb.position, curPath.vectorPath[curWaypoint]);
-            if (distance < nextWaypointDistance)
-            {
-                curWaypoint += 1;
+                // Iterate to next waypoint once we are close to the current one
+                float distance = Vector2.Distance(rb.position, curPath.vectorPath[curWaypoint]);
+                if (distance < nextWaypointDistance)
+                {
+                    curWaypoint += 1;
+                }
             }
         }
     }
-
 
 
     void FixedUpdate()

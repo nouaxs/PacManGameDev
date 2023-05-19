@@ -19,24 +19,43 @@ public class MainMenu : MonoBehaviour
 
     void RebuildDropdown()
     {
+
         profileDropdown.options.Clear();
         string[] profiles = Directory.GetFiles(Application.dataPath + "/profiles/", "*.profile");
         List<string> profilesList = new List<string>();
-        foreach (string s in profiles)
+
+        foreach (string filePath in profiles)
         {
-            
-            string pname = s.Substring(s.LastIndexOf("/") + 1);
-            if (pname.Equals(".profile"))  
-            {
-                continue;
-            }
-            profilesList.Add(pname.Substring(0, pname.LastIndexOf(".")));
+            string profileName = Path.GetFileNameWithoutExtension(filePath);
+            profilesList.Add(profileName);
         }
+
         profileDropdown.AddOptions(profilesList);
-        if(profileDropdown.options.Count > 0)
+
+        if (profileDropdown.options.Count > 0)
         {
             ProfileChanged(0);
         }
+
+
+        //profileDropdown.options.Clear();
+        //string[] profiles = Directory.GetFiles(Application.dataPath + "/profiles/", "*.profile");
+        //List<string> profilesList = new List<string>();
+        //foreach (string s in profiles)
+        //{
+
+        //    string pname = s.Substring(s.LastIndexOf("/") + 1);
+        //    if (pname.Equals(".profile"))
+        //    {
+        //        continue;
+        //    }
+        //    profilesList.Add(pname.Substring(0, pname.LastIndexOf(".")));
+        //}
+        //profileDropdown.AddOptions(profilesList);
+        //if (profileDropdown.options.Count > 0)
+        //{
+        //    ProfileChanged(0);
+        //}
     }
 
 
@@ -72,53 +91,39 @@ public class MainMenu : MonoBehaviour
 
         if (File.Exists(filePath))
         {
+            string content;
             string jsonData = File.ReadAllText(filePath);
             ProfileData profileData = JsonUtility.FromJson<ProfileData>(jsonData);
 
             profileDataPanel.SetActive(true);
             Text profileText = profileDataPanel.GetComponentInChildren<Text>();
-            profileText.text = "Profile Name: " + profileName + "\n";
-            profileText.text += "Highest score: " + profileData.highScore + "\n";
-            if (profileData.flawlessStatus > 1)
+            content = "Profile Name: " + profileName + "\n";
+            content += "Highest score: " + profileData.highScore + "\n";
+            if (profileData.flawlessStatus >= 1)
             {
-                profileText.text += "Flawless achievement was obtained" + "\n";
-            } else
-            {
-                profileText.text += "Flawless achievement was not obtained" + "\n";
-            }
-            if (profileData.fruitlessStatus > 1)
-            {
-                profileText.text += "Fruitless achievement was obtained" + "\n";
+                content += "Flawless achievement was obtained" + "\n";
             }
             else
             {
-                profileText.text += "Fruitless achievement was not obtained" + "\n";
+                content += "Flawless achievement was not obtained" + "\n";
             }
+            if (profileData.fruitlessStatus >= 1)
+            {
+                content += "Fruitless achievement was obtained" + "\n";
+            }
+            else
+            {
+                content += "Fruitless achievement was not obtained" + "\n";
+            }
+            profileText.text = content;
         }
     }
-        //string filePath = Application.dataPath + "/profiles/" + pname + ".profile";
 
-        //if (File.Exists(filePath))
-        //{
-        //    string jsonData = File.ReadAllText(filePath);
-        //    ProfileData profileData = JsonUtility.FromJson<ProfileData>(jsonData);
-
-        //    // Display the profile data
-        //    Debug.Log("Profile Name: " + pname);
-        //    Debug.Log("High Score: " + profileData.highScore);
-        //    Debug.Log("Flawless Status: " + profileData.flawlessStatus);
-        //    Debug.Log("Fruitless Status: " + profileData.fruitlessStatus);
-        //}
-        //else
-        //{
-        //    Debug.Log("Profile does not exist!");
-        //}
-
-        public void ClosePopupPanel()
-        {
-            profileDataPanel.SetActive(false);
-        }
+    public void ClosePopupPanel()
+    {
+        profileDataPanel.SetActive(false);
     }
+}
 
 
 
