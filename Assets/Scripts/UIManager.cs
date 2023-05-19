@@ -38,7 +38,7 @@ public class UIManager : MonoBehaviour
     public IEnumerator DoAchievement(string achievement, float showDuration)
     {
         Debug.Log(showDuration);
-        achievementTxt.text = "Congrats! You have earned " + achievement + " acheivement!";
+        achievementTxt.text = "Congrats! You have earned " + achievement + " achievement!";
         achievementPanel.SetActive(true);
         yield return new WaitForSeconds(showDuration);
         achievementPanel.SetActive(false);
@@ -49,10 +49,12 @@ public class UIManager : MonoBehaviour
         GameManager.singleton.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+
     public void ExitButton()
     {
         GameManager.singleton.LoadScene(0);
     }
+
 
     public void ResumeButton()
     {

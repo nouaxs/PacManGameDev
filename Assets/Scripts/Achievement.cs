@@ -44,7 +44,21 @@ public class Achievement : MonoBehaviour
         }
         
     }
+
+    public int GetAchievementStatus(string achievementName)
+    {
+        foreach (AchievementData achievement in data)
+        {
+            if (achievement.name == achievementName)
+            {
+                return achievement.status;
+            }
+        }
+
+        return 0; // Default status if achievement name is not found
+    }
 }
+
 
 [Serializable]
 public struct AchievementData

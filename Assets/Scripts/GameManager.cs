@@ -4,12 +4,13 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using static System.TimeZoneInfo;
 
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] int score;
-    [SerializeField] int lives;
+    [SerializeField] private int score;
+    [SerializeField] private int lives;
     public static GameManager singleton;
     private int highScore;
     private string curProfile;
@@ -21,12 +22,14 @@ public class GameManager : MonoBehaviour
         {
             singleton = this;
             DontDestroyOnLoad(gameObject);
-        } else { 
+        }
+        else
+        {
             Destroy(gameObject);
             return;
-        } 
+        }
         lives = 3;
-        
+
     }
 
     public void addScore(int amount)
@@ -51,7 +54,7 @@ public class GameManager : MonoBehaviour
         {
             if (score == 0 && SceneManager.GetActiveScene().buildIndex == 1)
             {
-                Achievement.singleton.SetAchievement("s", 1, true);
+                Achievement.singleton.SetAchievement("Fruitless", 1, true);
             }
             SaveCurrentProfile();
             LoadScene(0);
@@ -67,7 +70,7 @@ public class GameManager : MonoBehaviour
                 e.transform.position = e.transform.GetComponent<Enemy>().GetStartPosition();
             }
         }
-        
+
     }
 
     public void setHighScore(int newHighscore)
@@ -110,10 +113,81 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    //public void LoadProfile(string profile)
+    //{
+    //    curProfile = profile;
+    //    string filePath = Application.dataPath + "/profiles/" + curProfile + ".profile";
+
+    //    if (File.Exists(filePath))
+    //    {
+    //        string jsonData = File.ReadAllText(filePath);
+    //        ProfileData profileData = JsonUtility.FromJson<ProfileData>(jsonData);
+
+    //        highScore = profileData.highScore;
+    //        Achievement.singleton.SetAchievement("Flawless", profileData.flawlessStatus, false);
+    //        Achievement.singleton.SetAchievement("Fruitless", profileData.fruitlessStatus, false);
+    //    }
+    //}
+
+
     public string GetCurProfile()
     {
         return curProfile;
     }
+
+    //public void SaveCurrentProfile()
+    //{
+    //    string filePath = Application.dataPath + "/profiles/" + curProfile + ".profile";
+
+    //    ProfileData profileData = new ProfileData();
+    //    if (highScore < score)
+    //    {
+    //        profileData.highScore = score;
+    //    }
+
+    //    profileData.flawlessStatus = Achievement.singleton.GetAchievementStatus("Flawless");
+    //    profileData.fruitlessStatus = Achievement.singleton.GetAchievementStatus("Fruitless");
+
+    //    string jsonData = JsonUtility.ToJson(profileData);
+    //    File.WriteAllText(filePath, jsonData);
+    //}
+
+    //public void SaveCurrentProfile()
+    //{
+    //    string filePath = Application.dataPath + "/profiles/" + curProfile + ".profile";
+
+    //    ProfileData profileData = new ProfileData();
+
+    //    // Read the existing data
+    //    if (File.Exists(filePath))
+    //    {
+    //        string existingData = File.ReadAllText(filePath);
+    //        ProfileData prevData = JsonUtility.FromJson<ProfileData>(existingData);
+
+    //        // Check if the current score is higher than the existing high score
+    //        if (score > prevData.highScore)
+    //        {
+    //            profileData.highScore = score;
+    //        }
+    //        else
+    //        {
+    //            // Keep the existing high score
+    //            profileData.highScore = prevData.highScore;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        // No existing data, use the current score as the high score
+    //        profileData.highScore = score;
+    //    }
+
+    //    profileData.flawlessStatus = Achievement.singleton.GetAchievementStatus("Flawless");
+    //    profileData.fruitlessStatus = Achievement.singleton.GetAchievementStatus("Fruitless");
+
+    //    string jsonData = JsonUtility.ToJson(profileData);
+    //    File.WriteAllText(filePath, jsonData);
+    //}
+
 
     public void SaveCurrentProfile()
     {
@@ -123,7 +197,7 @@ public class GameManager : MonoBehaviour
             highScore = score;
         }
         data += "Highscore:" + highScore + "\n";
-        for(int i = 0; i < Achievement.singleton.data.Length; i++)
+        for (int i = 0; i < Achievement.singleton.data.Length; i++)
         {
             data += Achievement.singleton.data[i].name + ":" + Achievement.singleton.data[i].status + "\n";
         }
@@ -143,13 +217,12 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
     }
 
+
     public void SetEnemiesState(IEnemyState state)
     {
-        foreach(Enemy e in GameObject.FindObjectsOfType<Enemy>())
+        foreach (Enemy e in GameObject.FindObjectsOfType<Enemy>())
         {
             e.SetState(state);
         }
     }
-
-    
 }
